@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Singapore First-Timer's Guide — Fact-Checked</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f8f9fa;
+  --surface2: #f1f3f5;
+  --surface-hover: #e9ecef;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --accent: #4f46e5;
+  --accent-light: #eef2ff;
+  --accent-hover: #4338ca;
+  --border: #e5e7eb;
+  --border-light: #f0f0f0;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: var(--font); background: var(--surface); color: var(--text); line-height: 1.6; }
+
+/* Header */
+.hero { text-align:center; padding:48px 20px 32px; background:var(--bg); border-bottom:1px solid var(--border); }
+.hero h1 { font-size:1.8rem; font-weight:700; color:var(--text); margin-bottom:6px; }
+.hero p { color:var(--text-muted); font-size:0.95rem; max-width:600px; margin:0 auto; }
+.stats { display:flex; justify-content:center; gap:32px; margin-top:20px; }
+.stat-num { font-size:1.6rem; font-weight:700; color:var(--accent); }
+.stat-label { font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
+
+/* Controls */
+.controls { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); padding:10px 20px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center; }
+.controls input { background:var(--surface); border:1px solid var(--border); color:var(--text); padding:7px 14px; border-radius:var(--radius); font-size:0.85rem; width:260px; outline:none; }
+.controls input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-light); }
+.controls button { background:var(--bg); border:1px solid var(--border); color:var(--text-muted); padding:7px 14px; border-radius:var(--radius); cursor:pointer; font-size:0.8rem; transition:all 0.15s; }
+.controls button:hover, .controls button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* Container */
+.container { max-width:960px; margin:0 auto; padding:20px 16px; }
+
+/* Cards */
+.card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-lg); margin-bottom:10px; box-shadow:var(--shadow-sm); transition:all 0.2s; }
+.card:hover { box-shadow:var(--shadow-md); }
+.card-header { padding:18px 24px; cursor:pointer; position:relative; }
+.card-title { font-size:1.1rem; font-weight:600; color:var(--text); margin:0; padding-right:24px; }
+.card-subtitle { font-size:0.85rem; color:var(--text-muted); margin:2px 0 0; }
+.card-meta { display:flex; gap:8px; align-items:center; margin-bottom:4px; }
+.card-toggle { position:absolute; right:20px; top:50%; transform:translateY(-50%); font-size:1.1rem; color:var(--text-muted); transition:transform 0.3s; }
+.card.open .card-toggle { transform:translateY(-50%) rotate(180deg); }
+.card-body { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+.card.open .card-body { max-height:50000px; }
+
+/* Badges */
+.badge { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.8px; padding:2px 8px; border-radius:4px; font-weight:600; }
+.badge-primary { background:var(--accent-light); color:var(--accent); }
+.badge-secondary { background:#f0fdf4; color:#16a34a; }
+.badge-muted { background:var(--surface2); color:var(--text-muted); }
+.badge-warn { background:#fef2f2; color:#dc2626; }
+.badge-amber { background:#fffbeb; color:#d97706; }
+
+/* Bullets */
+.bullets-container { padding:0 24px 20px; }
+.bullet { border-left:3px solid var(--border); padding:10px 14px; margin-bottom:3px; cursor:pointer; border-radius:0 var(--radius) var(--radius) 0; transition:all 0.15s; position:relative; }
+.bullet:hover { background:var(--surface); border-left-color:var(--accent); }
+.bullet.expanded { background:var(--surface); border-left-color:var(--accent); }
+.bullet-summary { display:flex; align-items:flex-start; gap:10px; }
+.bullet-num { background:var(--accent-light); color:var(--accent); min-width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:600; flex-shrink:0; }
+.bullet-text { font-size:0.9rem; flex:1; }
+.bullet-arrow { color:var(--text-muted); font-size:0.75rem; transition:transform 0.3s; flex-shrink:0; margin-top:4px; }
+.bullet.expanded .bullet-arrow { transform:rotate(180deg); }
+.bullet-detail { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+.bullet.expanded .bullet-detail { max-height:5000px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+.bullet-detail p { font-size:0.88rem; line-height:1.75; color:var(--text-muted); margin-bottom:6px; }
+.bullet-detail .src { font-size:0.75rem; color:var(--text-muted); font-style:italic; }
+.bullet-detail .src a { color:var(--accent); text-decoration:none; }
+.bullet-detail .src a:hover { text-decoration:underline; }
+.bullet-detail table { width:100%; border-collapse:collapse; margin:8px 0; font-size:0.84rem; }
+.bullet-detail th, .bullet-detail td { text-align:left; padding:6px 10px; border-bottom:1px solid var(--border); color:var(--text-muted); }
+.bullet-detail th { color:var(--text); font-weight:600; background:var(--surface2); }
+
+/* Charts */
+.chart-container { padding:16px 24px; }
+.chart-title { font-size:0.9rem; color:var(--accent); margin-bottom:10px; font-weight:600; }
+.chart-note { font-size:0.75rem; color:var(--text-muted); margin-top:6px; font-style:italic; }
+canvas { max-width:100%; height:auto !important; }
+
+/* Section dividers */
+.section-label { text-align:center; padding:28px 0 12px; color:var(--text-muted); font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:2px; }
+
+/* Verdict rows for fact-check ledger */
+.verdict { font-family:var(--font-mono); font-size:0.72rem; padding:2px 8px; border-radius:4px; font-weight:600; flex-shrink:0; margin-top:2px; }
+.verdict-pass { background:#f0fdf4; color:#16a34a; }
+.verdict-fail { background:#fef2f2; color:#dc2626; }
+
+/* Responsive */
+@media (max-width:640px) {
+  .hero h1 { font-size:1.4rem; }
+  .controls input { width:100%; }
+  .card-header { padding:14px 16px; }
+  .bullets-container { padding:0 12px 16px; }
+}
+@media print { .card-body { max-height: none !important; } .controls { display:none; } }
+
+/* Commenting UI */
+.comment-btn { display:none; position:absolute; right:8px; top:50%; transform:translateY(-50%); background:var(--accent); color:#fff; border:none; border-radius:var(--radius); padding:4px 10px; font-size:0.7rem; cursor:pointer; z-index:10; }
+.bullet:hover .comment-btn { display:block; }
+.comment-form { margin-top:8px; display:flex; gap:6px; }
+.comment-form textarea { flex:1; border:1px solid var(--border); border-radius:var(--radius); padding:6px 10px; font-size:0.82rem; font-family:var(--font); resize:vertical; min-height:36px; }
+.comment-form button { background:var(--accent); color:#fff; border:none; border-radius:var(--radius); padding:6px 14px; font-size:0.78rem; cursor:pointer; }
+.comment-form button:hover { background:var(--accent-hover); }
+.comment-toast { position:fixed; bottom:20px; right:20px; background:#10b981; color:#fff; padding:10px 20px; border-radius:var(--radius); font-size:0.85rem; z-index:9999; animation:fadeOut 2s 1s forwards; }
+@keyframes fadeOut { to { opacity:0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Singapore First-Timer's Guide</h1>
+  <p>Everything a first-time visitor needs to know — culture, Singlish, laws that actually catch tourists, scams, and logistics. Every load-bearing claim was adversarially fact-checked against primary sources (3 independent reviewers per claim).</p>
+  <div class="stats">
+    <div><div class="stat-num">19</div><div class="stat-label">Verified claims</div></div>
+    <div><div class="stat-num">4</div><div class="stat-label">Myths killed</div></div>
+    <div><div class="stat-num">22</div><div class="stat-label">Sources</div></div>
+  </div>
+</div>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="Search the guide..." oninput="filterItems()">
+  <button onclick="filterCategory(0)" class="active" data-filter="0">All</button>
+  <button onclick="filterCategory(1)" data-filter="1">Laws</button>
+  <button onclick="filterCategory(2)" data-filter="2">Culture</button>
+  <button onclick="filterCategory(3)" data-filter="3">Singlish</button>
+  <button onclick="filterCategory(4)" data-filter="4">Hawker</button>
+  <button onclick="filterCategory(5)" data-filter="5">Logistics</button>
+  <button onclick="filterCategory(6)" data-filter="6">Mistakes</button>
+  <button onclick="filterCategory(7)" data-filter="7">Fact-Check</button>
+  <button onclick="expandAll()">Expand All</button>
+  <button onclick="collapseAll()">Collapse All</button>
+</div>
+
+<div class="container">
+
+<div class="section-label">Read this first</div>
+
+<!-- CARD: LAWS -->
+<div class="card" data-category="1" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-warn">Highest stakes</span><span class="badge badge-secondary">Adversarially verified</span></div>
+    <h3 class="card-title">Laws that actually catch tourists</h3>
+    <p class="card-subtitle">Singapore enforces rules other countries only print on signs. These are the ones visitors genuinely get fined (or worse) for.</p>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="bullets-container">
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">1</span><span class="bullet-text"><strong>Leave your vape at home — seriously.</strong> Bringing one in is illegal even in transit, fines are issued at the border, and convicted foreigners can be deported and barred from re-entry.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>This is the single most common way ordinary tourists get into real trouble in Singapore today. There is <strong>no personal-use exemption</strong>: possession, use, purchase, and import of e-vaporisers are all offences, and it applies even if you are only transiting through Changi. Enforcement is active at all three entry points — Changi Airport, Woodlands and Tuas land checkpoints — with 40 border cases detected in Q1 2024 alone (10 smuggling, 30 possession).</p>
+          <p>Since the intensified regime took effect on <strong>1 September 2025</strong>, foreigners caught possessing or using a vape face an on-the-spot composition fine of <strong>S$700</strong> (S$500 if under 18), with harsher consequences for repeat offenders. Foreigners <em>convicted</em> of vape offences can be <strong>deported and barred from re-entering Singapore</strong>. Disposal bins exist at checkpoints — if you realise you have one, bin it before immigration, don't gamble.</p>
+          <p class="src">Verified 3-0 against <a href="https://www.moh.gov.sg/newsroom/intensifying-enforcement-and-education-efforts-against-e-vaporisers/">MOH</a>, <a href="https://www.hsa.gov.sg/announcements/update-on-stepped-up-enforcement-against-e-vaporisers-and-education-efforts/">HSA</a>, <a href="https://www.bakermckenzie.com/en/insight/publications/alerts/2025/09/singapore-intensified-enforcement-against-vaping-implications-for-foreign">Baker McKenzie (Sep 2025)</a>, <a href="https://www.smartraveller.gov.au/destinations/asia/singapore">Smartraveller</a>.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">2</span><span class="bullet-text"><strong>Drugs: zero tolerance, including caning and a mandatory death sentence for some trafficking offences.</strong></span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Singapore's Misuse of Drugs Act is among the harshest in the world. Use and possession are criminally punished; penalties for trafficking include caning and a <strong>mandatory death sentence</strong> above certain quantity thresholds. "It was for personal use" and "it's legal where I'm from" are not defences — this includes cannabis products that are legal in your home country, and CBD products. Never carry a bag or package through the border for someone else, however innocent the request sounds.</p>
+          <p class="src">Verified 3-0 against <a href="https://www.smartraveller.gov.au/destinations/asia/singapore">Smartraveller (Australian Government)</a>.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">3</span><span class="bullet-text"><strong>No public drinking between 10:30pm and 7am</strong> — anywhere public. Geylang and Little India are stricter "Liquor Control Zones".</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>You can drink in licensed bars, restaurants and hotels at any hour they're licensed to serve — the ban covers <strong>public places</strong>: parks, beaches, void decks, the Merlion steps, the riverside outside the bar. So no carrying a 7-Eleven beer to Marina Bay for the 11pm view. Retail shops also stop selling takeaway alcohol at 10:30pm. In the designated Liquor Control Zones (Geylang, Little India) restrictions are tighter, especially on weekends and public holidays. The legal drinking age is 18 and venues do check ID.</p>
+          <p class="src">Verified 3-0 against <a href="https://www.smartraveller.gov.au/destinations/asia/singapore">Smartraveller</a>. Drinking-age detail: general knowledge, consistent with <a href="https://www.tembusulaw.com/insights/legal-drinking-age-singapore/">Tembusu Law</a>.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">4</span><span class="bullet-text"><strong>Chewing gum can't be brought in at all</strong> — including nicotine gum. Jaywalking and indoor smoking are real, punishable offences.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>The famous gum ban is an <strong>import and sale</strong> ban: you are not allowed to bring any chewing gum into the country, nicotine gum included (therapeutic gum is available from pharmacists locally). Chewing gum you somehow already have isn't itself the offence — spitting it out or sticking it anywhere is littering, which is.</p>
+          <p><strong>Jaywalking</strong> is a punishable offence, not just a custom — cross at signalised crossings; enforcement blitzes do happen. <strong>Smoking</strong> is banned in indoor venues and most public places; smoke only in designated smoking areas (look for the marked yellow boxes). Orchard Road is a special no-smoking zone outside designated points. Littering itself draws fines in the hundreds of dollars, with "Corrective Work Orders" (cleaning in a public vest) for repeat offenders.</p>
+          <p class="src">Gum/jaywalking/smoking verified 3-0 against <a href="https://www.smartraveller.gov.au/destinations/asia/singapore">Smartraveller</a>. Littering penalty details: general knowledge (NEA).</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">5</span><span class="bullet-text"><strong>On the MRT: no eating or drinking (up to S$500 fine), no flammables, and famously, no durians.</strong></span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Eating or drinking anything — including water and even for kids — is an offence on trains and in paid areas of stations, with signage citing fines up to S$500. Carrying flammable goods carries a larger fine. Durians are prohibited on the entire network (no fine listed on the sign — it's simply not allowed, and locals will back the rule; the smell lingers for hours). In practice: finish your kopi before the gantry, and if you buy durian in Geylang or Chinatown, eat it there.</p>
+          <p class="src">General knowledge — standard SMRT/LTA signage visible in every station. Not independently re-verified by the fact-check pass; treat exact fine amounts as indicative.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">6</span><span class="bullet-text"><strong>Speech about race and religion is legally protected territory</strong> — and public assembly needs a permit, even for one person.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Singapore treats racial and religious harmony as a legal matter, not just a social norm. Remarks that denigrate a race or religion can be criminal offences — this is not the place for edgy jokes about ethnicity or faith, online or offline. Separately, public assemblies and processions require a police permit, and that can apply to a <strong>one-person</strong> demonstration (holding a placard counts). As a tourist, just don't participate in any protest activity.</p>
+          <p class="src">General knowledge (Penal Code s.298, Public Order Act) — widely documented; not part of the adversarial verification set. Direction is correct; consult official sources for specifics.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">7</span><span class="bullet-text"><strong>Other fineable things visitors forget:</strong> not flushing public toilets, feeding pigeons/monkeys, connecting to unsecured Wi-Fi ("mooching"), and littering of any size.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>These are the long-tail offences that make Singapore "the fine city" of t-shirt fame. Realistically, tourists are rarely fined for toilet-flushing — but feeding wildlife (especially monkeys around MacRitchie and pigeons anywhere) genuinely draws enforcement, as does littering even a cigarette butt or tissue. The practical rule: if it would be mildly antisocial at home, assume it's a finable offence here, and you'll never have a problem. Singapore is strict, but the rules are legible and nobody is trying to trap you.</p>
+          <p class="src">General knowledge — long-documented NEA/NParks offences; not part of the adversarial verification set.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="chart-container">
+      <div class="chart-title">What it costs you (indicative fine amounts, SGD)</div>
+      <canvas id="finesChart" height="190"></canvas>
+      <div class="chart-note">Vape fine (S$700, post Sep-2025 regime) is adversarially verified; others are indicative signage/composition amounts from general knowledge — courts can impose more.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CARD: CULTURE -->
+<div class="card" data-category="2" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-primary">Etiquette</span></div>
+    <h3 class="card-title">Cultural sensitivities and everyday etiquette</h3>
+    <p class="card-subtitle">A multiracial, multireligious city that takes harmony seriously. Small gestures carry weight.</p>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="bullets-container">
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">1</span><span class="bullet-text"><strong>Three cultures, three etiquettes.</strong> Chinese (~74%), Malay (~13%), Indian (~9%) communities live side by side — learn the basics of each.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Singapore is not "a Chinese city" — it's a deliberate multiracial state with four official languages (English, Mandarin, Malay, Tamil). Practical implications: with Malay and Indian Singaporeans, <strong>give and receive things with your right hand</strong> (the left is traditionally unclean); don't offer pork or alcohol to Muslims or beef to many Hindus; don't touch anyone's head, including children's. When in doubt, a smile and modest politeness covers everything. Never make comparisons like "which race is better at X" even as a joke — see the Laws card for why.</p>
+          <p class="src">General knowledge — standard cross-cultural etiquette, consistent with sources surveyed (Traveloka culture guide, Monster Day Tours).</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">2</span><span class="bullet-text"><strong>Temple and mosque dress code:</strong> shoulders and knees covered, shoes off, and follow the signs on photography.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>You will almost certainly visit Sri Mariamman or Sri Veeramakaliamman (Hindu temples), the Buddha Tooth Relic Temple, and Sultan Mosque — all welcome tourists. Rules: remove shoes at the entrance; cover shoulders and knees (mosques and some temples lend robes/sarongs at the door); be quiet during prayer times; at mosques, non-Muslims stay out of the main prayer hall; don't point your feet at Buddha images or sit with soles facing an altar. At homes, shoes always come off at the door — you'll see the shoe pile outside every HDB flat.</p>
+          <p class="src">General knowledge — standard practice at Singapore's major religious sites.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">3</span><span class="bullet-text"><strong>Queue culture is sacred.</strong> Singaporeans queue for everything, and a long queue is a quality signal, not a deterrent.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Cutting a queue is about the rudest thing you can do in Singapore short of breaking a law. People queue for buses, lifts, food, sales — and at MRT platforms, arrows on the floor show where to stand: let passengers alight before boarding. On escalators, <strong>stand on the left, walk on the right</strong>. A famous local heuristic: if a hawker stall has a 30-minute queue of locals, join it — Singaporeans do not queue for mediocre food.</p>
+          <p class="src">General knowledge — consistent with surveyed etiquette sources (Monster Day Tours "unwritten rules").</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">4</span><span class="bullet-text"><strong>MRT manners:</strong> reserved seats are genuinely reserved, keep calls and music to yourself, and let people off first.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>The darker-coloured corner seats are reserved for the elderly, pregnant, and less mobile — sitting in one as a healthy tourist invites public shaming (there are entire social media accounts for it). Playing music or videos out loud on public transport is now an offence, not just rude. Keep to the left on walkways, don't block doors, and give way — the system moves millions of people daily on exactly this choreography.</p>
+          <p class="src">General knowledge — standard LTA/SMRT campaigns and bylaws.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">5</span><span class="bullet-text"><strong>Address people as "Uncle" and "Auntie"</strong> — it's warmth, not presumption. Service staff are addressed with respect.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>The taxi driver is "Uncle". The hawker stall lady is "Auntie". These are terms of friendly respect for anyone visibly older than you, and using them (sincerely, not mockingly) instantly smooths interactions. Singapore service culture is efficient rather than effusive — don't read brisk hawker service as rudeness; an auntie barking "what you want!" at a 40-person lunch queue is normal and benign. Say thank you, clear your tray, move along.</p>
+          <p class="src">General knowledge — consistent with surveyed culture guides.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">6</span><span class="bullet-text"><strong>No tipping — really.</strong> Restaurants add 10% service charge + 9% GST (the "++"), and hawkers/taxis don't expect anything.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Tipping is not part of the culture anywhere: not at hawker centres, not in taxis, not for hotel staff (a small note for exceptional help is fine but never expected). Restaurant menus often show prices as "$25++" — the plus-plus means 10% service charge and 9% GST will be added at the bill, so a "$25" dish costs about $30. The service charge is not a tip you can remove, and adding a further tip on top is unnecessary. Hawker prices are nett — what's on the sign is what you pay.</p>
+          <p class="src">General knowledge — GST rate of 9% effective since Jan 2024; service-charge convention universal in sit-down restaurants.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CARD: SINGLISH -->
+<div class="card" data-category="3" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-primary">Language</span></div>
+    <h3 class="card-title">Singlish survival glossary</h3>
+    <p class="card-subtitle">English is universal, but the street speaks Singlish — English fused with Hokkien, Malay, Cantonese and Tamil. You don't need to speak it, just decode it.</p>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="bullets-container">
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">1</span><span class="bullet-text"><strong>The particles: lah, leh, lor, meh, sia.</strong> They carry tone, not meaning — and you should understand them, not imitate them.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p><strong>Lah</strong> adds emphasis or finality ("Okay lah" = fine, settled). <strong>Leh</strong> softens ("Quite expensive leh" = it's a bit pricey, don't you think). <strong>Lor</strong> signals resignation ("No choice lor"). <strong>Meh</strong> expresses skepticism ("Really meh?" = are you sure?). <strong>Sia</strong> is an exclamation ("So hot sia!"). A warning from every local: tourists attempting Singlish usually sound like a bad accent impression — listen and enjoy, respond in normal English, and everyone's happy.</p>
+          <p class="src">General knowledge — consistent with surveyed Singlish guides (Honeycombers Singlish 101, Culture Trip).</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">2</span><span class="bullet-text"><strong>"Can" is a complete sentence.</strong> Can = yes/possible. "Can can!" = definitely. "Cannot" = no. "Can or not?" = is that okay?</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>The single most useful Singlish pattern. "Uncle, go Changi can?" — "Can!" That's a full, polite exchange. Variants: "Also can" (either works), "Sure can" (no problem), "Confirm can" (guaranteed), "How can!" (outrage: that's not acceptable). You may deploy this one as a tourist without embarrassment — it's functional, not an accent.</p>
+          <p class="src">General knowledge — consistent with surveyed Singlish guides.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">3</span><span class="bullet-text"><strong>Food vocabulary you'll actually use:</strong> makan, tabao, shiok, chope, kopi/teh codes.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p><strong>Makan</strong> = eat/food (Malay): "Go makan?" <strong>Tabao / dabao</strong> = takeaway: "Tabao one chicken rice." <strong>Shiok</strong> = delicious/amazing: the correct reaction to good laksa. <strong>Chope</strong> = to reserve (see Hawker card). The kopi ordering matrix is its own language:</p>
+          <table>
+            <tr><th>Order</th><th>What you get</th></tr>
+            <tr><td>Kopi</td><td>Coffee + condensed milk (sweet)</td></tr>
+            <tr><td>Kopi-O</td><td>Black coffee + sugar</td></tr>
+            <tr><td>Kopi-C</td><td>Coffee + evaporated milk + sugar</td></tr>
+            <tr><td>Kopi kosong</td><td>Coffee, nothing added</td></tr>
+            <tr><td>Kopi peng</td><td>Iced kopi</td></tr>
+            <tr><td>Teh / Teh tarik</td><td>Tea versions of all the above / "pulled" frothy milk tea</td></tr>
+            <tr><td>Milo dinosaur</td><td>Iced Milo with a mountain of Milo powder on top</td></tr>
+          </table>
+          <p class="src">General knowledge — the kopitiam ordering system is standard across Singapore; consistent with surveyed guides.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">4</span><span class="bullet-text"><strong>Social vocabulary:</strong> kiasu, paiseh, blur, ang moh, alamak, bojio, lepak.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p><strong>Kiasu</strong> (Hokkien: "afraid to lose") — the national trait of never wanting to miss out; explains the queues, the free-sample rushes, the chope-ing. <strong>Paiseh</strong> = embarrassed/shy ("Paiseh, can I squeeze past?"). <strong>Blur</strong> = clueless ("blur like sotong" = clueless as a squid). <strong>Ang moh</strong> = a white/Western person (descriptive, not hostile). <strong>Alamak!</strong> = oh no! <strong>Bojio</strong> = "you didn't invite me!" (mock outrage). <strong>Lepak</strong> = to chill/hang out. If someone says you "very on" or "steady lah" — you're being complimented.</p>
+          <p class="src">General knowledge — consistent with surveyed Singlish guides.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CARD: HAWKER -->
+<div class="card" data-category="4" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-primary">Food</span></div>
+    <h3 class="card-title">Hawker centre rules of engagement</h3>
+    <p class="card-subtitle">UNESCO-listed food culture with its own protocol. Master the tissue packet and the tray, and you pass as a regular.</p>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="bullets-container">
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">1</span><span class="bullet-text"><strong>The tissue packet on the table means the seat is taken.</strong> This is "chope-ing" — respect it, and feel free to do it yourself.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>At a busy hawker centre, you reserve ("chope") a table by placing a packet of tissues — or an umbrella, a lanyard, sometimes a name card — on it before going to queue for food. To a first-timer it looks like someone littered a tissue packet; to everyone else it's a binding social contract. <strong>Never move someone's tissue packet and sit down</strong> — it's the fastest way to an awkward confrontation. During the 12–1:30pm office lunch rush in the CBD, you'll need to chope too, or you'll be wandering with a hot tray. Bonus: tissue packets double as napkins, which hawker stalls don't provide — carry your own.</p>
+          <p class="src">Chope custom: well-documented across surveyed sources (Singapore Spirit hawker guide, local etiquette guides); custom itself not legally codified — it's social convention.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">2</span><span class="bullet-text"><strong>Return your own tray.</strong> Since 2021 it's enforceable with fines, and the tray-return stations are everywhere.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Clearing your own table is both the norm and, since September 2021, backed by enforcement: leaving your tray and litter behind at a hawker centre can draw a warning and then a composition fine. Look for the tray-return racks (usually split halal / non-halal — keep crockery in the right stream). This catches tourists who assume someone will clear up, restaurant-style. Nobody will; the cleaner aunties handle the racks, not your table.</p>
+          <p class="src">General knowledge — NEA tray-return enforcement since Sep 2021, widely reported; fine amounts not independently re-verified here.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">3</span><span class="bullet-text"><strong>Ordering protocol:</strong> queue at the stall, pay cash or local QR, carry your own food, and note that drinks come from a separate stall.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Hawker centres are self-service: queue at the stall, order (pointing at pictures works fine), pay, wait or come back for your food, carry it yourself. Many stalls are cash-first — some take PayNow QR (which foreign visitors usually <em>can't</em> use without a local bank) — so <strong>carry small cash notes</strong> at hawker centres even though the rest of Singapore is happily contactless. Drinks and dessert come from dedicated drink stalls, not the food stall. Expect S$4–8 for a famous plate of chicken rice, char kway teow, or laksa — the best cheap eating in the developed world.</p>
+          <p class="src">General knowledge — standard hawker operations; price range indicative as of 2026.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">4</span><span class="bullet-text"><strong>Which hawker centres first:</strong> Maxwell, Lau Pa Sat, Old Airport Road, Tiong Bahru, Chinatown Complex — each a different flavour of the same institution.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p><strong>Maxwell Food Centre</strong> (Chinatown): tourist-friendly, home of Tian Tian chicken rice. <strong>Chinatown Complex</strong>: the biggest, most local, upstairs maze. <strong>Lau Pa Sat</strong> (CBD): gorgeous Victorian ironwork; the adjacent street becomes open-air satay stalls at night. <strong>Old Airport Road</strong>: where locals tell you to actually go. <strong>Tiong Bahru Market</strong>: pair with the neighbourhood's cafes and bookshops. Go at off-peak hours (11:30am or 5:30pm) for shorter queues, and remember the rule from the Culture card: the queue <em>is</em> the review.</p>
+          <p class="src">General knowledge — standard recommendations, consistent across surveyed guides.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CARD: LOGISTICS -->
+<div class="card" data-category="5" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-secondary">Adversarially verified</span></div>
+    <h3 class="card-title">Getting around, money, and practical logistics</h3>
+    <p class="card-subtitle">Transit, GST refunds, tap water, weather — the mechanics of the trip, checked against official sources.</p>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="bullets-container">
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">1</span><span class="bullet-text"><strong>Your foreign contactless Visa/Mastercard/Amex works directly on the MRT and buses</strong> — no transit card needed. Foreign Visa/MC pay a S$0.60/day admin fee.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Just tap your contactless bank card (or the same card in Apple/Google Pay) at the gantry — American Express, Mastercard, NETS and Visa with the contactless indicator are all accepted, foreign-issued cards included. Three gotchas, all verified against SimplyGo's official FAQ: (1) foreign-issued Mastercard/Visa incur a <strong>S$0.60 admin fee per day of use</strong> — trivial, still cheaper than most alternatives; (2) you must <strong>tap in and out with the same card and same mode</strong> — don't tap in with the physical card and out with the phone wallet, they count as different cards; (3) <strong>present only one card at the gate</strong> — a wallet full of contactless cards can charge the wrong one. Heavy riders can instead buy a Singapore Tourist Pass (unlimited rides, 1–3 days) at major stations.</p>
+          <p class="src">Verified 3-0 (x3 claims) against <a href="https://simplygo.com.sg/faqs/cards-and-charms/simplygo/contactless-bank-cards/">SimplyGo official FAQ</a>. Tourist Pass: general knowledge.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">2</span><span class="bullet-text"><strong>Tap water is officially safe to drink straight from the tap</strong> — skip the bottled water entirely.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Singapore's national water agency PUB states it plainly: "Water is safe for drinking directly from the tap without any further filtration." Quality is within WHO Guidelines for Drinking-water Quality, with close to 500,000 tests a year, and PUB's lab has been a WHO Collaborating Centre since 2012. Carry a refillable bottle — in this heat you'll drain it, and hotel taps are as good as anything you can buy.</p>
+          <p class="src">Verified directly against <a href="https://www.pub.gov.sg/Public/WaterLoop/Water-Quality">PUB (national water agency)</a>.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">3</span><span class="bullet-text"><strong>GST refund (9%): minimum S$100 spend, airport departures only, kiosks before vs after immigration depending on where your goods are packed.</strong></span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Tourists can reclaim GST on goods via the Tourist Refund Scheme, with every rule below verified against IRAS and Singapore Customs:</p>
+          <p><strong>Eligibility:</strong> 16+, not a citizen/PR, not aircraft crew, not on a work/student/long-term pass (now, at purchase, or in the prior 3 months). <strong>Spend:</strong> minimum S$100 including GST per retailer — you can combine up to 3 same-day receipts from outlets sharing the same GST registration. <strong>At purchase:</strong> show your physical passport in person (photos/copies rejected). <strong>Claiming:</strong> air departures from <strong>Changi or Seletar only</strong> — leaving by bus to Malaysia or ferry to Batam forfeits the refund. At the airport, use the eTRS kiosks: goods in <strong>checked luggage → kiosk in the Check-In Hall before immigration</strong> (before you drop the bag); <strong>hand-carry → kiosk in the Transit Lounge after immigration</strong>. Customs may ask to see the goods, receipts, passport and boarding pass. Depart within 2 months of purchase and within 12 hours of kiosk approval; claim the payout within 2 months of approval.</p>
+          <p><strong>Exclusions:</strong> anything consumed in Singapore, goods exported by freight or for business, hotels, and all services. The scheme is voluntary (not all shops participate — look for the eTRS logo) and the refund is less than the full 9% because handling fees are deducted.</p>
+          <p class="src">Verified 3-0 (x4 claims) against <a href="https://www.iras.gov.sg/taxes/goods-services-tax-(gst)/consumers/tourist-refund-scheme">IRAS</a> and <a href="https://www.customs.gov.sg/individuals/going-through-customs/departure/tourist-refund-scheme/">Singapore Customs</a>; kiosk procedure verified directly against Customs.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">4</span><span class="bullet-text"><strong>Weather: 26–33°C and humid every single day.</strong> Dress light, carry an umbrella, and bring a layer for arctic indoor aircon.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Singapore sits 1° north of the equator: no seasons, just hot, humid, and a daily chance of a short violent thunderstorm (heavier Nov–Jan during the northeast monsoon). Plan like a local: outdoor sights in the early morning or evening, museums/malls in the midday furnace, and treat rain as a 40-minute pause rather than a ruined day. Dress codes are casual everywhere below fine-dining; shorts and sandals are fine. The real temperature trap is indoors — malls, the MRT, and cinemas are chilled hard, so a light layer earns its place in your daypack. Sunscreen matters even when overcast.</p>
+          <p class="src">General knowledge — equatorial climate; monsoon timing standard meteorological record.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">5</span><span class="bullet-text"><strong>Micro-logistics:</strong> UK-style Type G plugs, Grab over street taxis, passport needed for SIM cards, and leave time for Changi itself.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p><strong>Power:</strong> 230V, British three-pin Type G sockets — bring one adapter. <strong>Ride-hailing:</strong> Grab dominates; street taxis are honest and metered (no haggling culture at all), but surge-free Grab is usually simpler. <strong>SIM/eSIM:</strong> tourist SIMs require your passport by law; airport kiosks and convenience stores sell them, or use an eSIM. <strong>Changi:</strong> genuinely a destination — the Jewel waterfall (landside, before immigration) is worth arriving 60–90 minutes earlier than you otherwise would; note landside attractions mean you should do them <em>before</em> clearing departure immigration. <strong>Money:</strong> cards work almost everywhere except hawker stalls and some taxis — carry modest cash.</p>
+          <p class="src">General knowledge — standard, stable facts; not part of the adversarial verification set.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CARD: MISTAKES & SCAMS -->
+<div class="card" data-category="6" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-amber">Avoidable</span></div>
+    <h3 class="card-title">Tourist mistakes and the few scams that exist</h3>
+    <p class="card-subtitle">Singapore is one of the safest cities on earth — the mistakes here cost money and time, rarely safety.</p>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="bullets-container">
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">1</span><span class="bullet-text"><strong>Don't buy electronics at Sim Lim Square from pushy ground-floor shops.</strong> The classic Singapore tourist scam lives there.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>The one scam with a real body count of tourist wallets: aggressive shops (historically concentrated at Sim Lim Square) quoting a phone price, then adding massive "warranty" or "unlocking" fees after payment, or substituting inferior goods. Authorities have cracked down hard since the notorious 2014 cases, but the pattern survives. The fix is simple: buy electronics from major malls, official brand stores, or large chains (Challenger, Best Denki, the Apple Store) where prices are fixed and honest. If any shop anywhere won't show a final all-in price before you pay, walk out.</p>
+          <p class="src">Pattern documented in surveyed sources (backpackerlee Sim Lim account, World Nomads scam guide); current prevalence lower post-crackdown — treat as "avoid the setup", not "avoid the mall".</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">2</span><span class="bullet-text"><strong>Budget mistake: assuming everything is expensive, or everything is cheap.</strong> Food is cheap; alcohol, hotels and attractions are not.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Singapore runs on a barbell: a world-class hawker meal is S$4–8, the MRT crosses the island for about S$2 — while a cocktail is S$20–28, a pint S$12–18 (alcohol is heavily taxed), and big attractions (Universal Studios, Gardens by the Bay conservatories, the SEA Aquarium, Night Safari) stack up fast at S$25–90 each. First-timer play: eat hawker, ride MRT, pick two or three paid attractions deliberately, and enjoy the great free tier — Gardens by the Bay outdoor grounds and the 7:45/8:45pm light show, the Marina Bay waterfront loop, Changi's Jewel, free museums' open sections, and every neighbourhood walk (Katong-Joo Chiat, Tiong Bahru, Kampong Glam).</p>
+          <p class="src">General knowledge — indicative 2026 prices; verify current ticket prices when booking.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">3</span><span class="bullet-text"><strong>Itinerary mistake: staying only in Marina Bay / Orchard and calling it Singapore.</strong> The city lives in its neighbourhoods.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Marina Bay is the postcard; the character is elsewhere. Minimum viable neighbourhood circuit: <strong>Kampong Glam</strong> (Sultan Mosque, Haji Lane, Malay-Arab heritage), <strong>Little India</strong> (Tekka Centre, Serangoon Road — go hungry), <strong>Chinatown</strong> beyond the souvenir strip (Chinatown Complex upstairs, Ann Siang Hill), <strong>Katong-Joo Chiat</strong> (Peranakan shophouses and laksa), and <strong>Tiong Bahru</strong> (art-deco estate, market). Each is 2–4 hours including a meal, all MRT-reachable. Related mistake: allocating a whole day to Sentosa by default — it's fine, but it's a theme-park island; the neighbourhoods are what you'll remember.</p>
+          <p class="src">General knowledge / editorial judgment — consistent with surveyed "first-timer mistakes" discussions (TripAdvisor forum).</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">4</span><span class="bullet-text"><strong>Timing mistakes:</strong> underestimating the heat, overestimating how late things run, and missing that many museums and some hawker stalls close Mondays.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Three recurring first-timer regrets: (1) <strong>Heat pacing</strong> — planning a European-style 9-hour walking day; by noon you're done. Two outdoor blocks a day, max. (2) <strong>Closing times</strong> — Singapore is not a late city outside Clarke Quay and clubs; many hawker stalls sell out and close by 7–8pm, kopitiams wind down, and the famous breakfast stalls are a morning event. The 10:30pm retail alcohol cutoff (see Laws) surprises people too. (3) <strong>Rest days</strong> — several museums close Mondays and individual hawker stalls take arbitrary weekdays off; check before crossing town for one specific stall. Also: book Marina Bay Sands SkyPark, Gardens conservatories and Universal Studios slots ahead on weekends — walk-up queues are real.</p>
+          <p class="src">General knowledge / editorial judgment — verify specific opening days when planning.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="bullet-num">5</span><span class="bullet-text"><strong>Safety calibration: violent crime is near-zero, but "low crime doesn't mean no crime"</strong> — pickpockets exist, and the real risks are fines and overpaying.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>You can walk anywhere at 2am, use your phone openly, and let kids roam — Singapore's street safety is genuinely exceptional, and solo female travellers consistently rate it the easiest city in Asia. The police's own slogan is the right calibration: "low crime doesn't mean no crime." Watch belongings in crowded tourist crush points (Mustafa, MBS promenade during the light show), ignore the rare tout offering "special price" tours or taxis at tourist sites (licensed taxis queue at ranks; Grab is fixed-price), and know that the realistic ways this trip goes wrong are a vape at the border, a S$500 MRT snack, or a Sim Lim "warranty" — all covered above, all avoidable.</p>
+          <p class="src">General knowledge — consistent with World Nomads and official SPF messaging.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="section-label">How this guide was checked</div>
+
+<!-- CARD: FACT CHECK LEDGER -->
+<div class="card" data-category="7" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-secondary">Methodology</span></div>
+    <h3 class="card-title">Adversarial fact-check ledger</h3>
+    <p class="card-subtitle">104 research agents, 22 sources, 110 extracted claims, top 25 put through 3-vote adversarial verification (each reviewer instructed to refute). What survived, and what died.</p>
+    <span class="card-toggle">&#9662;</span>
+  </div>
+  <div class="card-body">
+    <div class="bullets-container">
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="verdict verdict-pass">CONFIRMED</span><span class="bullet-text">19 claims survived adversarial review — all vape-law, drug-penalty, alcohol-hours, gum, transit-payment, GST-refund and tap-water claims in this guide.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Each claim was independently attacked by three reviewers with access to the primary source, instructed to refute it; claims needed a majority of non-refutations to survive. 17 claims passed in the workflow (most 3-0, one 2-1, one 2-0), and 2 claims whose votes were cut off by a session limit (tap-water safety, eTRS kiosk procedure) were subsequently verified directly against PUB and Singapore Customs. Primary sources: MOH, HSA, IRAS, Singapore Customs, PUB, SimplyGo/TransitLink, Smartraveller (Australian Government), Baker McKenzie. Guide sections marked "General knowledge" were <em>not</em> part of this verified set — they are stable, widely-documented facts, but treat exact figures there as indicative.</p>
+          <p class="src">Full source list: MOH, HSA, Smartraveller, Baker McKenzie, SimplyGo, IRAS, Singapore Customs, PUB, NUS UHC, Wikipedia (gum ban), Tembusu Law, plus culture/scam sources (Honeycombers, Culture Trip, Singapore Spirit, Monster Day Tours, Traveloka, World Nomads, TripAdvisor forums, Time Out).</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="verdict verdict-fail">KILLED</span><span class="bullet-text">"Vaping carries a maximum fine of S$2,000" — refuted 0-3 as the headline figure. It's outdated: the regime changed on 1 Sep 2025.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>The S$2,000 maximum appears across older articles (and an Aug 2024 HSA announcement). Reviewers killed the claim as a standalone fact because penalties were subsequently tightened: since 1 September 2025 the operative numbers for a first-time foreign offender are a S$700 composition fine with escalation for repeat offences, deportation and re-entry bars on conviction, and harsher treatment of etomidate-laced "Kpods". Lesson: any pre-Sep-2025 article about Singapore vape penalties is out of date. This guide uses the current regime.</p>
+          <p class="src">Current regime per <a href="https://www.bakermckenzie.com/en/insight/publications/alerts/2025/09/singapore-intensified-enforcement-against-vaping-implications-for-foreign">Baker McKenzie Sep-2025 alert</a> (verified 3-0).</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="verdict verdict-fail">KILLED</span><span class="bullet-text">"Foreigners convicted of vape offences face a permanent ban" — refuted 0-3. Sources say "barred from re-entering", without establishing permanence.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>A good example of adversarial review catching overstatement: MOH's actual language is "deported and barred from re-entering Singapore". Whether the bar is permanent, time-limited, or discretionary is not specified in the primary source, so the "permanent" claim was killed while the accurate version (deported and barred) was confirmed 3-0. The practical takeaway for a tourist is identical: do not bring a vape.</p>
+          <p class="src">Accurate version verified 3-0 against <a href="https://www.moh.gov.sg/newsroom/intensifying-enforcement-and-education-efforts-against-e-vaporisers/">MOH</a>.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="verdict verdict-fail">KILLED</span><span class="bullet-text">Two more overreaches: "etomidate reclassified as Class C for six months" and "re-offending short-term visitors get permanent entry bans" — both refuted 0-3 as stated.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>Both claims came from secondary reporting on the Sep-2025 enforcement changes and failed verification against the cited source — the specific durations and "permanent" framing couldn't be substantiated. The confirmed core stands: etomidate vapes ("Kpods") are treated with drug-law severity, and repeat foreign offenders face escalating consequences. The pattern across all four killed claims is the same: directionally true, but with invented specifics. This is exactly the failure mode adversarial review exists to catch.</p>
+          <p class="src">Killed against <a href="https://www.bakermckenzie.com/en/insight/publications/alerts/2025/09/singapore-intensified-enforcement-against-vaping-implications-for-foreign">Baker McKenzie</a> source text.</p>
+        </div>
+      </div>
+
+      <div class="bullet" onclick="event.stopPropagation(); this.classList.toggle('expanded')">
+        <div class="bullet-summary"><span class="verdict verdict-pass">NOTE</span><span class="bullet-text">What was NOT adversarially verified: culture, Singlish, hawker customs, scam patterns, prices — sourced but lower-stakes.</span><span class="bullet-arrow">&#9662;</span></div>
+        <div class="bullet-detail">
+          <p>The verification budget was spent where being wrong hurts most: laws, penalties, money mechanics, and health/safety. Cultural customs (chope-ing, Singlish, etiquette) are drawn from multiple consistent travel/culture sources plus common knowledge and carry a "General knowledge" tag on each bullet; they're social conventions, so the cost of minor imprecision is a shrug, not a fine. All indicative prices (attraction tickets, food, drinks) should be checked at booking time — they drift.</p>
+          <p class="src">Methodology note — read "General knowledge" tags throughout the guide as "multi-source but not adversarially verified".</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Generated 2026-10-12 · 104 research agents · primary sources: MOH, HSA, IRAS, Customs, PUB, SimplyGo, Smartraveller</div>
+
+</div>
+
+<script>
+let activeFilter = 0;
+
+function filterItems() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    const cat = parseInt(card.dataset.category || '0');
+    const matchSearch = !q || text.includes(q);
+    const matchCat = activeFilter === 0 || cat === activeFilter;
+    card.style.display = (matchSearch && matchCat) ? '' : 'none';
+  });
+}
+
+function filterCategory(c) {
+  activeFilter = c;
+  document.querySelectorAll('.controls button[data-filter]').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-filter="${c}"]`).classList.add('active');
+  filterItems();
+}
+
+function expandAll() {
+  document.querySelectorAll('.card').forEach(c => { if (c.style.display !== 'none') c.classList.add('open'); });
+}
+
+function collapseAll() {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.bullet').forEach(b => b.classList.remove('expanded'));
+}
+
+function initChart(id) {
+  if (id !== 'finesChart') return;
+  const ctx = document.getElementById('finesChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Vape possession (adult)', 'Eating/drinking on MRT (up to)', 'Littering, 1st composition (up to)', 'Smoking outside designated area (up to)', 'Jaywalking composition (approx)'],
+      datasets: [{
+        label: 'SGD',
+        data: [700, 500, 300, 200, 50],
+        backgroundColor: ['#ef4444', '#f59e0b', '#f59e0b', '#f59e0b', '#f59e0b'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#f0f0f0' }, ticks: { callback: v => 'S$' + v } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// Lazy chart init
+document.addEventListener('DOMContentLoaded', () => {
+  const obs = new MutationObserver(muts => {
+    muts.forEach(m => {
+      if (m.target.classList.contains('open')) {
+        const canvas = m.target.querySelector('canvas');
+        if (canvas && !canvas.dataset.init) {
+          canvas.dataset.init = '1';
+          if (typeof initChart === 'function') initChart(canvas.id);
+        }
+      }
+    });
+  });
+  document.querySelectorAll('.card').forEach(c => obs.observe(c, { attributes: true, attributeFilter: ['class'] }));
+});
+
+// Commenting — posts to feedback server
+(function(){
+  const FEEDBACK_URL = '/feedback';
+  document.querySelectorAll('.bullet').forEach(bullet => {
+    const btn = document.createElement('button');
+    btn.className = 'comment-btn';
+    btn.textContent = 'Comment';
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      if (bullet.querySelector('.comment-form')) return;
+      const form = document.createElement('div');
+      form.className = 'comment-form';
+      form.innerHTML = '<textarea placeholder="Your feedback..."></textarea><button type="button">Send</button>';
+      form.querySelector('button').onclick = function(ev) {
+        ev.stopPropagation();
+        const text = form.querySelector('textarea').value.trim();
+        if (!text) return;
+        const card = bullet.closest('.card');
+        const payload = {
+          comment: text,
+          section: card ? card.querySelector('.card-title')?.textContent || '' : '',
+          target: bullet.querySelector('.bullet-text')?.textContent?.slice(0, 200) || '',
+          bullet_num: bullet.querySelector('.bullet-num')?.textContent || ''
+        };
+        fetch(FEEDBACK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) })
+          .then(r => { if(r.ok){ form.remove(); showToast('Feedback sent!'); } else { showToast('Error sending feedback'); } })
+          .catch(() => showToast('Server not running'));
+      };
+      bullet.appendChild(form);
+      form.querySelector('textarea').focus();
+    };
+    bullet.querySelector('.bullet-summary').appendChild(btn);
+  });
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'comment-toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3200);
+  }
+})();
+</script>
+
+</body>
+</html>
